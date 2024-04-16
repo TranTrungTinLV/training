@@ -1,0 +1,364 @@
+[
+  {
+    "_id": "Root",
+    "name": "Root",
+    "can": true,
+    "action": "manage",
+    "subject": "all"
+  },
+  {
+    "_id": "ReadRole",
+    "name": "read Role",
+    "can": true,
+    "action": "read",
+    "subject": ["Role", "Permission"],
+    "conditions": {
+      "name": { "$nin": ["Root"] }
+    }
+  },
+  {
+    "_id": "CreateRole",
+    "name": "create Role",
+    "can": true,
+    "action": "create",
+    "subject": "Role",
+    "conditions": {
+      "name": { "$nin": ["Root"] }
+    }
+  },
+  {
+    "_id": "UpdateRole",
+    "name": "update Role",
+    "can": true,
+    "action": "update",
+    "subject": "Role",
+    "conditions": {
+      "name": { "$nin": ["Root"] }
+    }
+  },
+  {
+    "_id": "DeleteRole",
+    "name": "delete Role",
+    "can": true,
+    "action": "delete",
+    "subject": "Role",
+    "conditions": {
+      "name": { "$nin": ["Root"] }
+    }
+  },
+  {
+    "_id": "DefaultReadUser",
+    "name": "read User",
+    "can": true,
+    "action": "read",
+    "subject": "User",
+    "conditions": {
+      "action": "read-myself"
+    }
+  },
+  {
+    "_id": "DefaultUpdateUser",
+    "name": "update User",
+    "can": true,
+    "action": "update",
+    "subject": "User",
+    "conditions": {
+      "action": "update-myself"
+    }
+  },
+  {
+    "_id": "ReadUser",
+    "name": "read User",
+    "can": true,
+    "action": "read",
+    "subject": "User",
+    "conditions": {
+      "action": "read-user"
+    }
+  },
+  {
+    "_id": "UpdateUser",
+    "name": "update User",
+    "can": true,
+    "action": "update",
+    "subject": "User",
+    "conditions": {
+      "action": "update-user"
+    }
+  },
+  {
+    "_id": "CreateUser",
+    "name": "create User",
+    "can": true,
+    "action": "create",
+    "subject": "User",
+    "conditions": {
+      "action": "create-user"
+    }
+  },
+  {
+    "_id": "DeleteUser",
+    "name": "delete User",
+    "can": true,
+    "action": "delete",
+    "subject": "User",
+    "conditions": {
+      "action": "delete-user"
+    }
+  },
+  {
+    "_id": "DefaultReadStudent",
+    "name": "read Student",
+    "can": true,
+    "action": "read",
+    "subject": ["Student", "User", "Information"],
+    "conditions": {
+      "action": "read-myself"
+    }
+  },
+  {
+    "_id": "ReadStudent",
+    "name": "read Student",
+    "can": true,
+    "action": "read",
+    "subject": ["Student", "User", "Information"],
+    "conditions": {
+      "action": "read-student"
+    }
+  },
+  {
+    "_id": "UpdateStudent",
+    "name": "update Student",
+    "can": true,
+    "action": "update",
+    "subject": ["Student", "User", "Information"],
+    "conditions": {
+      "action": "update-student"
+    }
+  },
+  {
+    "_id": "CreateStudent",
+    "name": "Create Student",
+    "can": true,
+    "action": "create",
+    "subject": ["Student", "User", "Information"],
+    "conditions": {
+      "action": "create-student"
+    }
+  },
+  {
+    "_id": "DeleteStudent",
+    "name": "delete Student",
+    "can": true,
+    "action": "delete",
+    "subject": ["Student", "User", "Information"],
+    "conditions": {
+      "action": "delete-student"
+    }
+  },
+  {
+    "_id": "ReadCourse",
+    "name": "read Course",
+    "can": true,
+    "action": "read",
+    "subject": "Course"
+  },
+  {
+    "_id": "CreateCourse",
+    "name": "create Course",
+    "can": true,
+    "action": "create",
+    "subject": "Course"
+  },
+  {
+    "_id": "UpdateCourse",
+    "name": "update Course",
+    "can": true,
+    "action": "update",
+    "subject": "Course"
+  },
+  {
+    "_id": "DeleteCourse",
+    "name": "delete Course",
+    "can": true,
+    "action": "delete",
+    "subject": "Course"
+  },
+  {
+    "_id": "ReadCommon",
+    "name": "read Common",
+    "can": true,
+    "action": "read",
+    "subject": "Common"
+  },
+  {
+    "_id": "CreateCommon",
+    "name": "create Common",
+    "can": true,
+    "action": "create",
+    "subject": "Common"
+  },
+  {
+    "_id": "UpdateCommon",
+    "name": "update Common",
+    "can": true,
+    "action": "update",
+    "subject": "Common"
+  },
+  {
+    "_id": "ReadSlide",
+    "name": "read Slide",
+    "can": true,
+    "action": "read",
+    "subject": ["TypeSlide", "Slide", "TypeEffect"]
+  },
+  {
+    "_id": "CreateSlide",
+    "name": "create Slide",
+    "can": true,
+    "action": "create",
+    "subject": ["TypeSlide", "Slide", "TypeEffect"]
+  },
+  {
+    "_id": "UpdateSlide",
+    "name": "update Slide",
+    "can": true,
+    "action": "update",
+    "subject": ["TypeSlide", "Slide", "TypeEffect"]
+  },
+  {
+    "_id": "DeleteSlide",
+    "name": "delete Slide",
+    "can": true,
+    "action": "delete",
+    "subject": ["TypeSlide", "Slide", "TypeEffect"]
+  },
+  {
+    "_id": "ReadAbout",
+    "name": "read About",
+    "can": true,
+    "action": "read",
+    "subject": ["Location", "Trademark"]
+  },
+  {
+    "_id": "CreateAbout",
+    "name": "create About",
+    "can": true,
+    "action": "create",
+    "subject": ["Location", "Trademark"]
+  },
+  {
+    "_id": "UpdateAbout",
+    "name": "update About",
+    "can": true,
+    "action": "update",
+    "subject": ["Location", "Trademark"]
+  },
+  {
+    "_id": "DeleteAbout",
+    "name": "delete About",
+    "can": true,
+    "action": "delete",
+    "subject": ["Location", "Trademark"]
+  },
+  {
+    "_id": "ReadTeam",
+    "name": "read Team",
+    "can": true,
+    "action": "read",
+    "subject": ["Team", "User", "TeamGroup", "TeamPosition"]
+  },
+  {
+    "_id": "CreateTeam",
+    "name": "create Team",
+    "can": true,
+    "action": "create",
+    "subject": ["Team", "User", "TeamGroup", "TeamPosition"]
+  },
+  {
+    "_id": "UpdateTeam",
+    "name": "update Team",
+    "can": true,
+    "action": "update",
+    "subject": ["Team", "User", "TeamGroup", "TeamPosition"]
+  },
+  {
+    "_id": "DeleteTeam",
+    "name": "delete Team",
+    "can": true,
+    "action": "delete",
+    "subject": ["Team", "User", "TeamGroup", "TeamPosition"]
+  },
+  {
+    "_id": "ReadNewPublic",
+    "name": "read New Public",
+    "can": true,
+    "action": "read",
+    "subject": "New",
+    "conditions": {
+      "mode": "public"
+    }
+  },
+  {
+    "_id": "ReadNewPrivate",
+    "name": "read New Private",
+    "can": true,
+    "action": "read",
+    "subject": "New",
+    "conditions": {
+      "mode": "private"
+    }
+  },
+  {
+    "_id": "ReadNewHidden",
+    "name": "read New Hidden",
+    "can": true,
+    "action": "read",
+    "subject": "New",
+    "conditions": {
+      "mode": "hidden"
+    }
+  },
+  {
+    "_id": "CreateNew",
+    "name": "create New",
+    "can": true,
+    "action": "create",
+    "subject": ["New", "TypeNew", "Categories"]
+  },
+  {
+    "_id": "UpdateNew",
+    "name": "update New",
+    "can": true,
+    "action": "update",
+    "subject": ["New", "TypeNew", "Categories"]
+  },
+  {
+    "_id": "DeleteNew",
+    "name": "delete New",
+    "can": true,
+    "action": "delete",
+    "subject": ["New", "TypeNew", "Categories"]
+  },
+  {
+    "_id": "ReadContact",
+    "name": "read Contact",
+    "can": true,
+    "action": "read",
+    "subject": "Contact"
+  },
+  {
+    "_id": "UpdateContact",
+    "name": "update Contact",
+    "can": true,
+    "action": "update",
+    "subject": "Contact"
+  },
+  {
+    "_id": "DeleteContact",
+    "name": "delete Contact",
+    "can": true,
+    "action": "delete",
+    "subject": "Contact"
+  }
+]

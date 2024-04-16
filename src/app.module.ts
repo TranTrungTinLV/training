@@ -1,0 +1,56 @@
+import { Module, forwardRef } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
+import {
+  AuthModule,
+  UsersModule,
+  AdminsModule,
+  CategoriesModule,
+  CommonsModule,
+  ContactsModule,
+  CoursesModule,
+  EmailsModule,
+  StudentsModule,
+  HistoriesModule,
+  LocationsModule,
+  NewsModule,
+  RolesModule,
+  TeamGroupsModule,
+  TeamPositionsModule,
+  TeamsModule,
+  TypeEffectsModule,
+  TypeSlidesModule,
+  TrademarksModule,
+  SlidesModule,
+  SlidesShowModule,
+} from './modules/index';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRoot(process.env.MONGO_URI),
+    AuthModule,
+    UsersModule,
+    AdminsModule,
+    CategoriesModule,
+    CommonsModule,
+    ContactsModule,
+    CoursesModule,
+    EmailsModule,
+    StudentsModule,
+    HistoriesModule,
+    LocationsModule,
+    NewsModule,
+    RolesModule,
+    TeamGroupsModule,
+    TeamPositionsModule,
+    TeamsModule,
+    TypeEffectsModule,
+    SlidesModule,
+    TypeSlidesModule,
+    TrademarksModule,
+    TrademarksModule,
+    SlidesShowModule,
+  ],
+})
+export class AppModule {}
