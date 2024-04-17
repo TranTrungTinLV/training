@@ -1,0 +1,1432 @@
+openapi: 3.0.0
+info:
+  title: NestJS - Open API 3.0.0
+  version: 2.0.0
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Auth
+  - name: User
+  - name: Location
+  - name: Email
+paths:
+  /emails:
+    post:
+      tags:
+        - Email
+      summary: send code
+      description: Create email
+      operationId: create
+      requestBody:
+        description: Create email
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+        required: true
+      responses:
+        '201':
+          description: "We have sent a verification code to your email.\nPlease enter code to below."
+        '400':
+          description: "1. Invalid email address;\n2. Invalid code!"
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      description: Login with credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      responses:
+        200:
+          description: Successful login
+        401:
+          description: Access token is missing or invalid
+        400:
+          description: Invalid Credentials
+        500:
+          description: Interval Server
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      description: Register user with credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+      responses:
+        200:
+          description: Successful Register
+        401:
+          description: Access token is missing or invalid
+        400:
+          description: Invalid Credentials
+        500:
+          description: Interval Server
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      description: Logout user with credentials
+      responses:
+        200:
+          description: Successful Register
+        401:
+          description: Access token is missing or invalid
+        400:
+          description: Invalid Credentials
+        500:
+          description: Interval Server
+      security:
+        - Bearer: []
+  /auth/refreshToken:
+    post:
+      tags:
+        - Auth
+      description: refresh new token
+      responses:
+        200:
+          description: Successful refresh
+        401:
+          description: Access token is missing or invalid
+        400:
+          description: Invalid Credentials
+        500:
+          description: Interval Server
+      security:
+        - Bearer: []
+  /locations/{children}:
+    post:
+      tags:
+        - Location
+      summary: update info in Location
+      parameters:
+        - name: children
+          description: address | email | phone
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - address
+              - email
+              - phone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /locations/{children}/{id}:
+    put:
+      tags:
+        - Location
+      summary: update info of Location
+      parameters:
+        - name: children
+          in: path
+          description: address | email | phone
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: id of element ('address', 'email', 'phonenumber')
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    delete:
+      tags:
+        - Location
+      summary: Delete item ('address', 'email', 'phone') in Location collection
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: children
+          in: path
+          description: children is ('address', 'email', 'phone') to return
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: id of element ('address', 'email', 'phone')
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /users:
+    post:
+      tags:
+        - User
+      summary: Create New User
+      description: Create New
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: Create User Successfully
+  /users/{id}:
+    get:
+      tags:
+        - User
+      summary: Get Info User
+      description: Get Info User By Id
+      parameters:
+        - name: id
+          in: path
+          description: Id of the user to get info
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get Info Successfully
+        404:
+          description: Not Found User
+    put:
+      tags:
+        - User
+      summary: update account
+      description: update user
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          description: Id of User
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update user
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
+      responses:
+        '200':
+          description: 'Updated successfully.'
+        '400':
+          description: "1. First name is required;\n2. Last name is required;\n3. Invalid username;\n4.  is not language!"
+        '404':
+          description: 'User not found!|Information not found!'
+    delete:
+      tags:
+        - User
+      summary: Delete User
+      description: Delete User By Id User
+      parameters:
+        - name: id
+          in: path
+          description: Id of the User to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Delete User Successfully
+        404:
+          description: Not Found User
+  /trademarks:
+    get:
+      tags:
+        - Trademarks
+      summary: trademarks
+      description: Get all trademark.
+      responses:
+        '200':
+          description: Get all Trademark success
+        '400':
+          description: Invalid status value
+  /trademarks/logo:
+    patch:
+      tags:
+        - Trademarks
+      summary: update logo trademark
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: type
+          in: query
+          description: type is (favicon', 'logo-icon', 'logo-word', 'logo') to return
+          required: true
+          schema:
+            type: string
+            enum:
+              - favicon
+              - logo-icon
+              - logo-word
+              - logo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Update item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /trademarks/license/{id}:
+    patch:
+      tags:
+        - Trademarks
+      summary: update license
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: id
+          in: path
+          description: id of license
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: L I E N C E S G O D  2023
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        201:
+          description: Update item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    delete:
+      tags:
+        - Trademarks
+      summary: delete license
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: id
+          in: path
+          description: id of license to return
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Update item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /trademarks/license:
+    post:
+      tags:
+        - Trademarks
+      summary: create license
+      description: This can only be done by the logged in user.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: L I E N C E S G O D  2023
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        201:
+          description: Update item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+
+  /news:
+    get:
+      tags:
+        - New
+      summary: read posts
+      description: Get all New
+      responses:
+        '200':
+          description: 'Listed successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/New'
+        '400':
+          description: Invalid status value
+    post:
+      tags:
+        - New
+      summary: create new post
+      description: Create new Sharing
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/New'
+      responses:
+        201:
+          description: Create item success
+        422:
+          description: Invalid input value
+        500:
+          description: Internal Server Error
+  /news/{id}:
+    get:
+      tags:
+        - New
+      summary: get info post
+      description: Returns a single Share
+      parameters:
+        - name: id
+          in: path
+          description: ID or Slug of Share to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Listed successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/New'
+        404:
+          description: Share not found.
+        500:
+          description: Internal Server Error
+    put:
+      tags:
+        - New
+      summary: update new
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/New'
+      responses:
+        '200':
+          description: Delete success.
+        '404':
+          description: Share not found.
+        '500':
+          description: Internal Server Error.
+    delete:
+      tags:
+        - New
+      summary: delete new
+      description: Delete Shares
+      parameters:
+        - name: id
+          in: path
+          description: ID of User to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Delete success.
+        404:
+          description: Share not found.
+        500:
+          description: Internal Server Error
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: read categories
+      description: read categories.
+      parameters:
+        - name: sort
+          in: query
+          description: ID of Share to return
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get all categories success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    post:
+      tags:
+        - Categories
+      summary: Create new categories
+      description: This can only be done by the logged in user.
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Categories'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categories'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Categories'
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: read categories
+      description: Returns a single categories
+      parameters:
+        - name: id
+          in: path
+          description: ID of categories to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get data success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    put:
+      tags:
+        - Categories
+      summary: Update categories
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: id
+          in: path
+          description: id that need to be update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Categories'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - Categories
+      summary: Deletes a Categories
+      description: delete a Categories
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get data success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /commons:
+    get:
+      tags:
+        - Commons
+      summary: Get all data of ('training','product','mission','vision','introduce') collection
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: destination
+          in: query
+          description: destination is ('training','product','mission','vision','introduce') to return
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    post:
+      tags:
+        - Commons
+      summary: Create a new common
+      description: This can on be done by the logged in user
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  enum:
+                    - mission
+                    - vision
+                    - training
+                    - produce
+                    - introduce
+                  default: mission
+                description:
+                  type: string
+                  example: <p>Sgod là công ty nghiên cứu và cung cấp dịch vụ/giải pháp công nghệ ứng dụng BlockChain (chuỗi khối) và AI (trí tuệ nhân tạo) vào quản lý nhằm tăng cường khả năng bảo mật Sgod  là công ty nghiên cứu và cung cấp dịch vụ/giải pháp công nghệ ứng dụng BlockChain (chuỗi khối) và AI (trí tuệ nhân tạo) vào quản lý nhằm tăng cường khả năng bảo mật Sgod là công ty nghiên cứu và cung cấp dịch vụ/giải pháp công nghệ ứng dụng BlockChain (chuỗi khối) và AI (trí tuệ nhân tạo) vào quản lý nhằm tăng cường khả năng bảo mật.</p>
+                image:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Get data success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /commons/{id}:
+    put:
+      tags:
+        - Commons
+      description: This can on be done by the logged in user
+      parameters:
+        - name: id
+          in: path
+          description: id that need to be update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: mission
+                description:
+                  type: string
+                  example: <p>Sgod là công ty nghiên cứu và cung cấp dịch vụ/giải pháp công nghệ ứng dụng BlockChain (chuỗi khối) và AI (trí tuệ nhân tạo) vào quản lý nhằm tăng cường khả năng bảo mật Sgod  là công ty nghiên cứu và cung cấp dịch vụ/giải pháp công nghệ ứng dụng BlockChain (chuỗi khối) và AI (trí tuệ nhân tạo) vào quản lý nhằm tăng cường khả năng bảo mật Sgod là công ty nghiên cứu và cung cấp dịch vụ/giải pháp công nghệ ứng dụng BlockChain (chuỗi khối) và AI (trí tuệ nhân tạo) vào quản lý nhằm tăng cường khả năng bảo mật.</p>
+                image:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Get data success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /commons/{title}:
+    delete:
+      tags:
+        - Commons
+      summary: Delete item in common based on title
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: title
+          in: path
+          description: title is ('training','product','mission','vision','introduce')
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Update item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /courses:
+    get:
+      tags:
+        - Course
+      summary: get courses
+      description: This can only be done by the logged in user.
+      responses:
+        '200':
+          description: Get all Course success
+        '400':
+          description: Invalid status value
+    post:
+      tags:
+        - Course
+      summary: create course
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /courses/{id}:
+    get:
+      tags:
+        - Course
+      summary: Get Info course
+      description: Returns a single Course
+      parameters:
+        - name: id
+          in: path
+          description: ID or Slug of Course to return
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    put:
+      tags:
+        - Course
+      summary: Update Course
+      description: This can only be done by the logged in user.
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        default:
+          description: successful operation
+
+    delete:
+      tags:
+        - Course
+      summary: Deletes a Course
+      description: delete a Share
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /courses/{id}/{children}:
+    post:
+      tags:
+        - Course
+      summary: update info Course
+      parameters:
+        - name: id
+          in: path
+          description: ID of Course to return
+          required: true
+          schema:
+            type: string
+        - name: children
+          in: path
+          description: children is (lession,willlearn,studyRoute)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                willlearn:
+                  type: array
+                  items:
+                    type: string
+                    example: Hello
+                lession:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Sgod
+                    schedule:
+                      type: string
+                      example: 2-4-6
+                    timeBeginLession:
+                      type: string
+                      example: 2022-01-01T00:00:00.000Z
+                studyRoute:
+                  type: object
+                  properties:
+                    chapter:
+                      type: string
+                      example: Chapter1
+                    chapterContent:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          lesson:
+                            type: string
+                            example: Bai1
+                          numberOfLesson:
+                            type: string
+                            example: 3
+
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /courses/{id}/{children}/{index}:
+    put:
+      tags:
+        - Course
+      summary: update info Course
+      parameters:
+        - name: id
+          in: path
+          description: ID of Course to return
+          required: true
+          schema:
+            type: string
+        - name: children
+          in: path
+          description: children is (lession,willlearn,studyRoute)
+          required: true
+          schema:
+            type: string
+        - name: index
+          required: true
+          in: path
+          description: _id of (lession,studyRoute)
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                willlearn:
+                  type: array
+                  items:
+                    type: string
+                    example: Hello
+                lession:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Sgod
+                    schedule:
+                      type: string
+                      example: 2-4-6
+                    timeBeginLession:
+                      type: string
+                      example: 2022-01-01T00:00:00.000Z
+                studyRoute:
+                  type: object
+                  properties:
+                    chapter:
+                      type: string
+                      example: Chapter1
+                    chapterContent:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          lesson:
+                            type: string
+                            example: Bai1
+                          numberOfLesson:
+                            type: string
+                            example: 3
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    delete:
+      tags:
+        - Course
+      summary: delete info Course
+      parameters:
+        - name: id
+          in: path
+          description: ID of Course to return
+          required: true
+          schema:
+            type: string
+        - name: children
+          in: path
+          description: children is (lession,studyRoute)
+          required: true
+          schema:
+            type: string
+        - name: index
+          required: true
+          in: path
+          description: _id of (lession,studyRoute)
+          schema:
+            type: string
+      responses:
+        201:
+          description: Delete item success
+        404:
+          description: Invalid input value
+        422:
+          description: Delete Error
+        500:
+          description: Internal Server Error
+  /teams:
+    get:
+      tags:
+        - Team
+      summary: read team
+      description: This can only be done by the logged in user.
+      responses:
+        '200':
+          description: Get all Team success
+        '400':
+          description: Invalid status value
+    post:
+      tags:
+        - Team
+      summary: create team
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Team'
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+  /teams/{id}:
+    get:
+      tags:
+        - Team
+      summary: read team
+      description: Returns a single typeshare
+      parameters:
+        - name: id
+          in: path
+          description: ID of Team to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get data success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    put:
+      tags:
+        - Team
+      summary: Update Team
+      parameters:
+        - name: id
+          in: path
+          description: id that need to be update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/_Team'
+      responses:
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+    delete:
+      tags:
+        - Team
+      summary: Deletes a Team
+      description: delete a Team
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get data success
+        201:
+          description: Create item success
+        404:
+          description: Invalid input value
+        422:
+          description: Create Error
+        500:
+          description: Internal Server Error
+components:
+  schemas:
+    Email:
+      type: object
+      properties:
+        addr:
+          type: string
+          example: infor@gmail.com
+    Auth:
+      type: object
+      properties:
+        username:
+          type: string
+          example: phanquang617
+        password:
+          type: string
+          example: Pquang123@
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: phanquang615@gmail.com
+        password:
+          type: string
+          example: Pquang123@
+        full_name:
+          type: object
+          properties:
+            last:
+              type: string
+              example: phan
+            first:
+              type: string
+              example: quang
+        birthday:
+          type: object
+          properties:
+            day:
+              type: number
+              example: 10
+            month:
+              type: number
+              example: 11
+            year:
+              type: number
+              example: 2021
+        code:
+          type: string
+          example: 770182
+        sex:
+          type: string
+          enum: ['Male', 'Female', 'Other']
+          example: Male
+        address:
+          type: string
+          example: 400 Dang Dinh Tuong, Phuong An Khanh, Q2
+    Location:
+      type: object
+      properties:
+        addressItem:
+          type: object
+          properties:
+            area:
+              type: string
+              example: HN
+              default: TeamPosition
+              description: teasefd
+            address:
+              type: string
+              example: 11 Thái Thuận, Phường An Phú, Tp. Thủ Đức, Tp. Hồ Chí Minh
+            map:
+              type: string
+              description: address
+        emailItem:
+          type: object
+          properties:
+            title:
+              type: string
+              example: Blockchain & AI
+            email:
+              type: string
+              example: phongnguyenw@gmail.com
+            type:
+              type: string
+              example: chăm sóc
+        phoneItem:
+          type: object
+          properties:
+            title:
+              type: string
+              example: Blockchain & AI
+            phone:
+              type: string
+              example: 0123456789
+            type:
+              type: string
+              example: chăm sóc
+    New:
+      type: object
+      required:
+        - title
+        - summary
+        - content
+        - author
+        - mode
+        - tags
+        - categories
+      properties:
+        title:
+          type: string
+          example: Sgod
+        summary:
+          type: string
+          example: Sgod & Blockchain
+        content:
+          type: string
+          example: Sgod CV & Blockchain
+        author:
+          type: string
+          example: Sgod
+        mode:
+          enum:
+            - pending
+            - public
+            - private
+            - hidden
+        tags:
+          type: array
+          items:
+            type: string
+            example: Sgod
+        categories:
+          type: array
+          items:
+            type: string
+            example: 633f9d90cc7db2ab77ba503d
+        image:
+          type: string
+          format: binary
+        time_public:
+          type: string
+          example: 2023-04-03T07:37:01.292+00:00
+    Categories:
+      type: object
+      properties:
+        name:
+          type: string
+          default: IOT
+        parent:
+          type: array
+          default: ['633f85e83a5cac6e4463c804']
+    Course:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Blockchain
+        description:
+          type: string
+          example: Blockchain & AI
+        level:
+          type: string
+          example: Basic
+        price:
+          type: string
+          example: 3000000
+        timeOpening:
+          type: string
+          example: 2022-01-01
+          format: date-time
+          pattern: 'DD-MM-YYYY'
+        timeExpire:
+          type: string
+          example: 2022-12-12
+          format: date-time
+          pattern: 'DD-MM-YYYY'
+        maxQuantity:
+          type: string
+          example: 30
+        reducePrice:
+          type: string
+          example: 2
+        teacher:
+          type: string
+          example: Sgod
+        image:
+          type: string
+          format: binary
+    Team:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+        full_name:
+          type: object
+          properties:
+            first:
+              type: string
+              example: Sgod
+            last:
+              type: string
+              example: 5904
+        email:
+          type: string
+          example: infor@gmail.com
+        phone:
+          type: string
+          example: '0343242992'
+        birthday:
+          type: object
+          properties:
+            day:
+              type: number
+              example: 4
+            month:
+              type: number
+              example: 6
+            year:
+              type: number
+              example: 2001
+        sex:
+          type: string
+          enum:
+            - Male
+            - Female
+            - Other
+          example: Male
+        academicLevel:
+          type: string
+          example: 'Thac Si'
+        experience:
+          type: string
+          example: 'Sgod'
+        position:
+          type: string
+          example: 6438f2938946235f75365baa
+        groupId:
+          type: string
+          example: 6438f2938946235f75365baa
+    _Team:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+        full_name:
+          type: object
+          properties:
+            first:
+              type: string
+              example: Sgod
+            last:
+              type: string
+              example: 5904
+        email:
+          type: string
+          example: infor@gmail.com
+        phone:
+          type: string
+          example: '0343242992'
+        birthday:
+          type: object
+          properties:
+            day:
+              type: integer
+              example: 4
+            month:
+              type: integer
+              example: 6
+            year:
+              type: integer
+              example: 2001
+        sex:
+          type: string
+          enum:
+            - Male
+            - Female
+            - Other
+          example: Male
+        academicLevel:
+          type: string
+          example: 'Thac Si'
+        experience:
+          type: string
+          example: 'Sgod'
+    Account:
+      type: object
+      required:
+        - full_name
+        - username
+        - sex
+        - address
+      properties:
+        avatar:
+          type: string
+          format: binary
+        full_name:
+          type: object
+          properties:
+            first:
+              type: string
+              example: Sai
+            last:
+              type: string
+              example: Odessa
+        username:
+          type: string
+          example: saigonodessa
+        birthday:
+          type: object
+          properties:
+            day:
+              type: integer
+              example: 29
+            month:
+              type: integer
+              example: 9
+            year:
+              type: integer
+              example: 1997
+        sex:
+          type: string
+          enum:
+            - Male
+            - Female
+            - Other
+          default: Male
+        address:
+          type: string
+          example: 2 Street No. 2 Tan Truong Residential Area, Phu Thuan, District 7, Ho Chi Minh City, Vietnam
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
